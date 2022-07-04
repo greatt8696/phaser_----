@@ -4,18 +4,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
     scene.add.existing(this);
-    scene.Physics.add.existing(this);
+    // scene.Physics.add.existing(this);
 
     // Mixins 재활용함수 
-    Object.assign(this, collidable);
-    Object.assign(this, anims);
+    // Object.assign(this, collidable);
+    // Object.assign(this, anims);
 
     this.init();
     this.initEvents();
+
   }
 
   init() {
     this.health = 30;
+    this.cursors = this.scene.input.keyboard.createCursorKeys();
 
     // this.scene.time.addEvent({
     //   delay: 350,
