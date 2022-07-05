@@ -1,50 +1,62 @@
-import Phaser, { Scene } from 'phaser';
-import firebase from 'firebase/compat/app';
-import Preload from './scenes/Preload';
-import Play from './scenes/Play';
+import Phaser from "phaser";
+import firebase from "firebase/compat/app";
+import Preload from "./scenes/Preload";
+import PlayScene from "./scenes/PlayScene";
 
-const MAP_WIDTH = 1600;
-
-let width = innerWidth;
-let height = innerHeight;
+let width = 600;
+let height = 400;
 
 const SHARED_CONFIG = {
-  width: 800,
-  height: 600,
+  width: width,
+  height: height,
   debug: true,
 };
 
-const scenes = [Preload, Play];
+// const Scenes = [Preload, PlayScene];
+const Scenes = [PlayScene, Preload];
 const createScene = (Scene) => new Scene(SHARED_CONFIG);
-const initScenes = () => scenes.map(createScene);
+const initScenes = () => Scenes.map(createScene);
+
+/* const scenes = [
+   new Scene(SHARED_CONFIG), 
+   new Scene(SHARED_CONFIG), 
+   new Scene(SHARED_CONFIG)
+  ] 
+*/
+
+// const config = {
+//   //webGL : Phaser.AUTO
+//   type: Phaser.AUTO,
+//   ...SHARED_CONFIG,
+//   pixcelArt: true,
+//   zoom: 1,
+//   physics: {
+//     //경량 물리엔진 arcade
+//     default: "arcade",
+//     arcade: {
+//       debug: true,
+//       // gravity: 50,
+//     },
+//   },
+//   scene: initScenes(),
+// };
 
 const config = {
   //webGL : Phaser.AUTO
   type: Phaser.AUTO,
   ...SHARED_CONFIG,
-
   pixcelArt: true,
-
+  zoom: 2,
   physics: {
     //경량 물리엔진 arcade
-    default: 'arcade',
+    default: "arcade",
     arcade: {
-      debug: SHARED_CONFIG.debug,
+      debug: true,
+      gravity: { y: 20 },
     },
   },
   scene: initScenes(),
-  // scene: {
-  //   preload,
-  //   create,
-  // },
+  // scene: [new PlayScene(SHARED_CONFIG), Preload],
 };
 
-function preload() {
-  this.load.image('background', '../assets/background.png');
-}
-function create() {
-  this.add.image(0, 0, 'background').setOrigin(0);
-  this.add.sprite(config.width / 2, config.height / 2, 'player').setOrigin(0);
-}
-
-window.game = new Phaser.Game(config);
+new Phaser.Game(config);

@@ -1,24 +1,26 @@
-import Phaser from "phaser";
+// import Phaser from "phaser";
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
+
     scene.add.existing(this);
     // scene.Physics.add.existing(this);
-
-    // Mixins 재활용함수 
+    // Mixins 재활용함수
     // Object.assign(this, collidable);
     // Object.assign(this, anims);
-
     this.init();
-    this.initEvents();
-
+    // this.initEvents();
+    debugger;
+    console.log(this);
   }
 
   init() {
+    this.gravity = 100;
     this.health = 30;
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
-
+    console.log("@player Scene@@@@@@@@@@@");
+    // this.cursors = this.scene.input.keyboard.createCursorKeys();
+    // this.body.setGravityY(this.gravity);
     // this.scene.time.addEvent({
     //   delay: 350,
     //   repeat: -1,
@@ -31,12 +33,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // });
   }
 
-  initEvents() {
-    this.scene.events.on(Phaser.Scene.Events.UPDATE, this.update(), this);
+  // initEvents() {
+  //   this.scene.events.on(Phaser.Scene.Events.UPDATE, this.update(), this);
+  // }
+  create() {
+    console.log("@@@@@@@@@@@@");
   }
 
   //매 프레임마다 업데이트되는 함수
-  update() {}
+  update() {
+    console.log("@@@@@@@@@@@@");
+  }
 }
 
 export default Player;
