@@ -3,34 +3,37 @@ import Pasher from "phaser";
 import initAnimation from "../characters/anims/playerAnims";
 
 class PlayScene extends Pasher.Scene {
+  // new PlayScene(SHARED_CONFIG) 때 입력값을 config 으로 받음 (SHARED_CONFIG = config)
   constructor(config) {
     super("PlayScene");
     this.config = config;
-    this.player;
     this.VELOCITY = 400;
   }
   create() {
+    //바탕화면 선언
     this.add
       .image(this.config.width / 2, this.config.height / 2, "background")
       .setOrigin(0.5);
 
+    // 입자효과 선언 (preload에서 미리 로드된 이미지 : particle-2)
     this.particle = this.add.particles("particle-2");
-    this.player = this.physics.add
-      .sprite(this.config.width, this.config.height, "cat")
-      .setScale(0.4)
-      .setOrigin(0.5);
 
-      this.player.setImmovable();
-    this.player.body.velocity.x = this.VELOCITY;
+    // 플레이어 선언
+    this.player = this.physics.add //this.physics 물리엔진 arcade에 적용될 객체 sprite 선언
+      .sprite(this.config.width / 2, this.config.height / 2, "cat") // 처음 위치할 x,y 좌표와 'cat'이미지 설정
+      .setScale(0.4) // 크기 설정값
+      .setOrigin(0.5); // 기준값 정중앙으로 변경
 
-    this.player.setBounce(1).setCollideWorldBounds(true);
+    this.player.setImmovable(); // 다른 객체들과 충돌했을때 무시함.
 
-    initAnimation(this.anims);
+    this.player.body.velocity.x = this.VELOCITY; // 초기 속도 설정
 
-    this.player.play("cat").setOrigin(0.5);
+    this.player.setBounce(1) // 충돌했을때 튕겨나오는 정도 설정
+    .setCollideWorldBounds(true); //맵 가장자리에서 튕겨나오는 여부
 
-    // this.cameras.follow(this.player, Phaser.Cameras, 0.1, 0.1);
-    // this.input.onDown.add(shake, this);
+    initAnimation(this.anims);// 애니메이션 선언
+
+    this.player.play("cat").setOrigin(0.5); // 플레이어에 
 
     this.cameras.main.startFollow(this.player);
     this.cameras.main.shake(500, 0.01, 0.01);
@@ -73,8 +76,7 @@ class PlayScene extends Pasher.Scene {
   }
 
   update() {
-    
-    this.physics.collide(this.group)
+    this.physics.collide(this.group);
     // console.log( this.player.setVelocityX());
     // this.player.flipX = this.player.setVelocityX() < 0 ? true : false
     // console.log(this.player.body.velocity.angle());
