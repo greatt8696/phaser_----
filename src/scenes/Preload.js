@@ -1,17 +1,18 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
 
-class Preload extends Phaser.Scene {
+class PreloadScene extends Phaser.Scene {
   constructor(config) {
     super("PreloadScene");
     this.config = config;
   }
   preload() {
-
-    console.log("preload")
-
+    console.log("@@@@preload");
     this.load.image("background", "assets/background.png");
 
     this.load.image("player_character", "assets/player_1/Pink_Monster.png");
+
+    this.load.image("particle", "assets/tiny-particle.png")
+    this.load.image("particle-2", "assets/tiny-particle-2.png")
 
     this.load.spritesheet(
       "player-1-idle",
@@ -20,6 +21,15 @@ class Preload extends Phaser.Scene {
         frameWidth: 32,
         frameHeight: 32,
         spacing: 32,
+      }
+    );
+    this.load.spritesheet(
+      "cat",
+      "assets/cat.png",
+      {
+        frameWidth: 188,
+        frameHeight: 188,
+        // spacing: 188,
       }
     );
 
@@ -60,10 +70,12 @@ class Preload extends Phaser.Scene {
     // this.add
     //   .image(this.config.width / 2, this.config.height / 2, "player_character")
     //   .setOrigin(0.5);
+    this.scene.start("PlayScene");
   }
+  update() {}
 }
 
 // this.add.sprite(this.config, this.config, 'player').setOrigin(0);
 // this.scene.start('PlayScene');
 
-export default Preload;
+export default PreloadScene;

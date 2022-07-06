@@ -11,7 +11,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // Object.assign(this, anims);
     this.init();
     // this.initEvents();
-    debugger;
     console.log(this);
   }
 

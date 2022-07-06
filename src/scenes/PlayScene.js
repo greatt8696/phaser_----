@@ -2,99 +2,88 @@ import Player from "../characters/Players";
 import Pasher from "phaser";
 import initAnimation from "../characters/anims/playerAnims";
 
-// class PlayScene extends Pasher.Scene {
-//   constructor(config) {
-//     super("PlayScene");
-//     this.config = config;
-//   }
-//   create() {
-//     this.player = this.createPlayer();
-//     console.log(this.player);
-//     const map = {};
-//     const camera = this.cameras.main;
-//     // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
-//     // camera.startFollow(this.player.sprite);
-//     // camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-//   }
-//   createPlayer() {
-//     this.add
-//       .image(this.config.width / 2, this.config.height / 2, "player_character")
-//       .setOrigin(0.5);
-//     return new Player(this, this.config.width / 2, this.config.height / 2);
-//   }
-//   update(){
-//     console.log("playscene start")
-//   }
-// }
-
-// export default PlayScene;
-
 class PlayScene extends Pasher.Scene {
   constructor(config) {
     super("PlayScene");
     this.config = config;
     this.player;
-    this.VELOCITY = 150;
-  }
-  preload() {
-    this.load.image("background", "assets/background.png");
-    this.load.image("player_character", "assets/player_1/Pink_Monster.png");
-    this.load.spritesheet(
-      "player-1-idle",
-      "assets/player_1/Pink_Monster_Idle_4.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
-        spacing: 32,
-      }
-    );
-
-    this.load.spritesheet(
-      "player-1-run",
-      "assets/player_1/Pink_Monster_Run_6.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
-        spacing: 32,
-      }
-    );
-
-    this.load.spritesheet(
-      "player-1-throw",
-      "assets/player_1/Pink_Monster_Throw_4.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
-        spacing: 32,
-      }
-    );
-
-    this.load.spritesheet(
-      "player-1-back",
-      "assets/player_1/Pink_Monster_Climb_4.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
-        spacing: 32,
-      }
-    );
+    this.VELOCITY = 400;
   }
   create() {
     this.add
       .image(this.config.width / 2, this.config.height / 2, "background")
       .setOrigin(0.5);
+
+    this.particle = this.add.particles("particle-2");
     this.player = this.physics.add
-      .sprite(this.config.width / 2, this.config.height / 2, "player_character")
+      .sprite(this.config.width, this.config.height, "cat")
+      .setScale(0.4)
       .setOrigin(0.5);
-    // debugger;
+
     this.player.body.velocity.x = this.VELOCITY;
 
+    this.player.setBounce(1).setCollideWorldBounds(true);
+
     initAnimation(this.anims);
-    this.player.play("run");
+
+    this.player.play("cat").setOrigin(0.5);
+
+    // this.cameras.follow(this.player, Phaser.Cameras, 0.1, 0.1);
+    // this.input.onDown.add(shake, this);
+
     this.cameras.main.startFollow(this.player);
+    this.cameras.main.shake(500, 0.01, 0.01);
+
+    // set camera center
+    this.cameras.main.setFollowOffset(-180, -100);
+
+    this.group = this.physics.add.group();
+
+    for (let idx = 0; idx < 100; idx++) {
+      const temp = this.group.create(
+        Phaser.Math.Between(0, this.config.width),
+        Phaser.Math.Between(0, this.config.height),
+        "cat"
+      );
+      temp.setScale(0.3);
+      temp.setBounce(1);
+      temp.setCollideWorldBounds(true);
+      temp.setVelocity(
+        Phaser.Math.Between(-200, 200),
+        Phaser.Math.Between(-100, -200)
+      );
+      temp.setMaxVelocity(300);
+    }
+    this.group.children.iterate((child) => {
+      child.play("cat");
+    });
+    this.physics.add.collider(this.player, this.group);
+
+    this.particle.createEmitter({
+      x: this.config.width / 2,
+      y: this.config.height / 2,
+      lifespan: 1000,
+      speed: { min: 150, max: 300 },
+      scale: { start: 0.3, end: 0 },
+      gravityY: 1200,
+      follow: this.player,
+      blendMode: "ADD",
+    });
   }
 
   update() {
+    // console.log( this.player.setVelocityX());
+    // this.player.flipX = this.player.setVelocityX() < 0 ? true : false
+    // console.log(this.player.body.velocity.angle());
+    this.player.rotation = this.player.body.velocity.angle();
+
+    this.group.children.iterate((child) => {
+      child.rotation = child.body.velocity.angle();
+      child.flipX = child.body.velocity.x > 0 ? true : false;
+    });
+
+    this.player.flipX = this.player.body.velocity.x > 0 ? true : false;
+
     if (this.player.x >= this.config.width - this.player.width / 2) {
       this.player.body.velocity.x = -this.VELOCITY;
     } else if (this.player.x <= this.player.width / 2) {

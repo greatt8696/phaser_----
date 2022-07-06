@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 import firebase from "firebase/compat/app";
-import Preload from "./scenes/Preload";
+import PreloadScene from "./scenes/Preload";
 import PlayScene from "./scenes/PlayScene";
 
-let width = 600;
-let height = 400;
+let width = 1700;
+let height = 850;
 
 const SHARED_CONFIG = {
   width: width,
@@ -13,7 +13,7 @@ const SHARED_CONFIG = {
 };
 
 // const Scenes = [Preload, PlayScene];
-const Scenes = [PlayScene, Preload];
+const Scenes = [PreloadScene, PlayScene];
 const createScene = (Scene) => new Scene(SHARED_CONFIG);
 const initScenes = () => Scenes.map(createScene);
 
@@ -46,12 +46,12 @@ const config = {
   type: Phaser.AUTO,
   ...SHARED_CONFIG,
   pixcelArt: true,
-  zoom: 2,
+  zoom: 1.5,
   physics: {
     //경량 물리엔진 arcade
     default: "arcade",
     arcade: {
-      debug: true,
+      debug: false,
       gravity: { y: 20 },
     },
   },
