@@ -20,6 +20,7 @@ class PlayScene extends Pasher.Scene {
       .setScale(0.4)
       .setOrigin(0.5);
 
+      this.player.setImmovable();
     this.player.body.velocity.x = this.VELOCITY;
 
     this.player.setBounce(1).setCollideWorldBounds(true);
@@ -39,7 +40,7 @@ class PlayScene extends Pasher.Scene {
 
     this.group = this.physics.add.group();
 
-    for (let idx = 0; idx < 100; idx++) {
+    for (let idx = 0; idx < 500; idx++) {
       const temp = this.group.create(
         Phaser.Math.Between(0, this.config.width),
         Phaser.Math.Between(0, this.config.height),
@@ -52,7 +53,7 @@ class PlayScene extends Pasher.Scene {
         Phaser.Math.Between(-200, 200),
         Phaser.Math.Between(-100, -200)
       );
-      temp.setMaxVelocity(300);
+      temp.setMaxVelocity(100);
     }
     this.group.children.iterate((child) => {
       child.play("cat");
@@ -72,6 +73,8 @@ class PlayScene extends Pasher.Scene {
   }
 
   update() {
+    
+    this.physics.collide(this.group)
     // console.log( this.player.setVelocityX());
     // this.player.flipX = this.player.setVelocityX() < 0 ? true : false
     // console.log(this.player.body.velocity.angle());
