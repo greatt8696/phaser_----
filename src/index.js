@@ -51,10 +51,10 @@ const config = {
     arcade: {
 
       //디버그 옵션 true로 바꾸면 객체마다 박스와 진행방향 보임
-      debug: false,
+      debug: true,
 
       // 게임 전반에 공통적인 중력 값이 적용
-      gravity: { y: 20 },
+      gravity: { y: 0 },
     },
   },
 
